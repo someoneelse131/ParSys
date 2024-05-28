@@ -12,7 +12,6 @@ const initializeWebsocketServer = (server) => {
 const broadcastPrices = async () => {
   if (sockets.length === 0) return;
   const prices = await getLatestPrices();
-  //console.log("Fetched prices: ", prices);
   if (prices.length === 0) return;
   sockets.forEach((socket) => sendPrices(socket, prices));
 };
