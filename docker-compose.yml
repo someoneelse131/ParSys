@@ -20,39 +20,12 @@ services:
     depends_on:
       - rabbitmq
 
-  consumer-aapl:
-    container_name: aapl
-    build: ./consumers/consumer-aapl
+  consumer:
+    container_name: consumer
+    build: ./consumer
     environment:
       - RABBITMQ_URL=amqp://stockmarket:supersecret123@rabbitmq:5672/
       - MONGODB_URL=mongodb://mongodb1:27017,mongodb2:27018,mongodb3:27019/?replicaSet=rs0
-      - QUEUE_NAME=AAPL
-    depends_on:
-      - rabbitmq
-      - mongodb1
-      - mongodb2
-      - mongodb3
-
-  consumer-msft:
-    container_name: msft
-    build: ./consumers/consumer-msft
-    environment:
-      - RABBITMQ_URL=amqp://stockmarket:supersecret123@rabbitmq:5672/
-      - MONGODB_URL=mongodb://mongodb1:27017,mongodb2:27018,mongodb3:27019/?replicaSet=rs0
-      - QUEUE_NAME=MSFT
-    depends_on:
-      - rabbitmq
-      - mongodb1
-      - mongodb2
-      - mongodb3
-
-  consumer-tsla:
-    container_name: tsla
-    build: ./consumers/consumer-tsla
-    environment:
-      - RABBITMQ_URL=amqp://stockmarket:supersecret123@rabbitmq:5672/
-      - MONGODB_URL=mongodb://mongodb1:27017,mongodb2:27018,mongodb3:27019/?replicaSet=rs0
-      - QUEUE_NAME=TSLA
     depends_on:
       - rabbitmq
       - mongodb1
@@ -108,7 +81,8 @@ services:
     build: ./frontend
     environment:
       - MONGODB_URL=mongodb://mongodb1:27017,mongodb2:27018,mongodb3:27019/?replicaSet=rs0
-
+    ports:
+      - "3000:3000"
     depends_on:
       - mongodb1
       - mongodb2
