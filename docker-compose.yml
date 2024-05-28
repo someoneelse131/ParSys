@@ -108,8 +108,7 @@ services:
     build: ./frontend
     environment:
       - MONGODB_URL=mongodb://mongodb1:27017,mongodb2:27018,mongodb3:27019/?replicaSet=rs0
-    ports:
-      - "3000:3000"
+
     depends_on:
       - mongodb1
       - mongodb2
