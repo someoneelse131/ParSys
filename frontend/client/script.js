@@ -1,10 +1,37 @@
-const url = window.location.href;
-const socket = new WebSocket(url.replace("http", "ws"));
+const createWebSocket = () => {
+  const url = window.location.href.replace("http", "ws");
+  const socket = new WebSocket(url);
 
-// Listen for WebSocket open event
-socket.addEventListener("open", (event) => {
-  console.log("WebSocket connected.");
-});
+  socket.addEventListener("open", () => {
+    console.log("WebSocket connected.");
+  });
+
+  socket.addEventListener("message", (event) => {
+    const message = JSON.parse(event.data);
+    switch (message.type) {
+      case "prices":
+        prices = message.prices;
+        renderPrices();
+        break;
+      default:
+        console.error("Unknown message type:", message.type);
+    }
+  });
+
+  socket.addEventListener("close", (event) => {
+    console.log("WebSocket closed. Reconnecting...");
+    setTimeout(createWebSocket, 1000); // Attempt to reconnect after 1 second
+  });
+
+  socket.addEventListener("error", (event) => {
+    console.error("WebSocket error:", event);
+    socket.close();
+  });
+
+  return socket;
+};
+
+let socket = createWebSocket();
 
 let prices = [];
 
@@ -47,26 +74,3 @@ const renderPrices = () => {
     }
   });
 };
-
-// Listen for messages from server
-socket.addEventListener("message", (event) => {
-  const message = JSON.parse(event.data);
-  switch (message.type) {
-    case "prices":
-      prices = message.prices;
-      renderPrices();
-      break;
-    default:
-      console.error("Unknown message type:", message.type);
-  }
-});
-
-// Listen for WebSocket close event
-socket.addEventListener("close", (event) => {
-  console.log("WebSocket closed.");
-});
-
-// Listen for WebSocket errors
-socket.addEventListener("error", (event) => {
-  console.error("WebSocket error:", event);
-});
