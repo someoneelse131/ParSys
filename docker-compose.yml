@@ -15,17 +15,44 @@ services:
     container_name: producer
     build: ./producer
     environment:
-      - RABBITMQ_URL=amqp://${RABBITMQ_DEFAULT_USER}:${RABBITMQ_DEFAULT_PASS}@rabbitmq:5672/
+      - RABBITMQ_URL=${RABBITMQ_URL}
       - TICKER_INTERVAL=1
     depends_on:
       - rabbitmq
 
-  consumer:
-    container_name: consumer
+  consumer-apple:
+    container_name: consumer-apple
     build: ./consumer
     environment:
-      - RABBITMQ_URL=amqp://${RABBITMQ_DEFAULT_USER}:${RABBITMQ_DEFAULT_PASS}@rabbitmq:5672/
-      - MONGODB_URL=mongodb://mongodb1:27017,mongodb2:27018,mongodb3:27019/?replicaSet=rs0
+      - RABBITMQ_URL=${RABBITMQ_URL}
+      - MONGODB_URL=${MONGODB_URL}
+      - QUEUE_NAME=AAPL
+    depends_on:
+      - rabbitmq
+      - mongodb1
+      - mongodb2
+      - mongodb3
+
+  consumer-tesla:
+    container_name: consumer-tesla
+    build: ./consumer
+    environment:
+      - RABBITMQ_URL=${RABBITMQ_URL}
+      - MONGODB_URL=${MONGODB_URL}
+      - QUEUE_NAME=TSLA
+    depends_on:
+      - rabbitmq
+      - mongodb1
+      - mongodb2
+      - mongodb3
+
+  consumer-microsoft:
+    container_name: consumer-microsoft
+    build: ./consumer
+    environment:
+      - RABBITMQ_URL=${RABBITMQ_URL}
+      - MONGODB_URL=${MONGODB_URL}
+      - QUEUE_NAME=MSFT
     depends_on:
       - rabbitmq
       - mongodb1
@@ -47,8 +74,8 @@ services:
     ports:
       - 27017:27017
     volumes:
-      - "mongodb1_data:/data/db"
-      - "mongodb1_config:/data/configdb"
+      - mongodb1_data:/data/db
+      - mongodb1_config:/data/configdb
 
   mongodb2:
     image: mongo:7.0
@@ -60,8 +87,8 @@ services:
     ports:
       - 27018:27018
     volumes:
-      - "mongodb2_data:/data/db"
-      - "mongodb2_config:/data/configdb"
+      - mongodb2_data:/data/db
+      - mongodb2_config:/data/configdb
 
   mongodb3:
     image: mongo:7.0
@@ -73,14 +100,14 @@ services:
     ports:
       - 27019:27019
     volumes:
-      - "mongodb3_data:/data/db"
-      - "mongodb3_config:/data/configdb"
+      - mongodb3_data:/data/db
+      - mongodb3_config:/data/configdb
 
   frontend1:
     container_name: fe1
     build: ./frontend
     environment:
-      - MONGODB_URL=mongodb://mongodb1:27017,mongodb2:27018,mongodb3:27019/?replicaSet=rs0
+      - MONGODB_URL=${MONGODB_URL}
     ports:
       - "3000:3000"
     depends_on:
@@ -97,7 +124,7 @@ services:
     container_name: fe2
     build: ./frontend
     environment:
-      - MONGODB_URL=mongodb://mongodb1:27017,mongodb2:27018,mongodb3:27019/?replicaSet=rs0
+      - MONGODB_URL=${MONGODB_URL}
     ports:
       - "3001:3000"
     depends_on:
