@@ -2,7 +2,7 @@
 
 1. Install Docker on your machine
 2. edit ".env" files for specific settings
-3. Copy both files (docker-compose.yml and .ebv) into a folder
+3. Copy both files (docker-compose.yml and .env) into a folder
 4. Navigate into folder and run Command
 docker compose up
 
