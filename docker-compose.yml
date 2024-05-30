@@ -13,7 +13,8 @@ services:
 
   stock-publisher:
     container_name: producer
-    build: ./producer
+    image: arsidd/producer:latest
+    restart: always
     environment:
       - RABBITMQ_URL=${RABBITMQ_URL}
       - TICKER_INTERVAL=1
@@ -22,7 +23,7 @@ services:
 
   consumer-apple:
     container_name: consumer-apple
-    build: ./consumer
+    image: arsidd/consumer:latest
     environment:
       - RABBITMQ_URL=${RABBITMQ_URL}
       - MONGODB_URL=${MONGODB_URL}
@@ -35,7 +36,7 @@ services:
 
   consumer-tesla:
     container_name: consumer-tesla
-    build: ./consumer
+    image: arsidd/consumer:latest
     environment:
       - RABBITMQ_URL=${RABBITMQ_URL}
       - MONGODB_URL=${MONGODB_URL}
@@ -48,7 +49,7 @@ services:
 
   consumer-microsoft:
     container_name: consumer-microsoft
-    build: ./consumer
+    image: arsidd/consumer:latest
     environment:
       - RABBITMQ_URL=${RABBITMQ_URL}
       - MONGODB_URL=${MONGODB_URL}
@@ -105,7 +106,7 @@ services:
 
   frontend1:
     container_name: fe1
-    build: ./frontend
+    image: arsidd/frontend:latest
     environment:
       - MONGODB_URL=${MONGODB_URL}
     ports:
@@ -122,7 +123,7 @@ services:
 
   frontend2:
     container_name: fe2
-    build: ./frontend
+    image: arsidd/frontend:latest
     environment:
       - MONGODB_URL=${MONGODB_URL}
     ports:
@@ -139,7 +140,7 @@ services:
 
   nginx:
     container_name: lb
-    build: ./nginx
+    image: arsidd/nginx:latest
     ports:
       - "80:80"
     depends_on:
