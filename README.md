@@ -21,8 +21,7 @@ docker ps
 docker ps -a
 
 
-#########################################################
-################### CHEATSHEET ##########################
+# CHEATSHEET #
 
 # run docker container
 docker run -it container_name bash
