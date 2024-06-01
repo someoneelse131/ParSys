@@ -6,68 +6,68 @@
 4. Navigate into folder and run Command
 docker compose up
 
-# Additional Commands and Infos
+## Additional Commands and Infos
 
-# Pull Image install and run container
+### Pull Image install and run container
 docker compose up -d
 
-# Stop complete container
+### Stop complete container
 docker compose down
 
-# Lookup running containers
+### Lookup running containers
 docker ps
 
-# Lookup stopped containers
+### Lookup stopped containers
 docker ps -a
 
 
 # CHEATSHEET #
 
-# run docker container
+### run docker container
 docker run -it container_name bash
 
-# Show active Container
+### Show active Container
 docker ps
 
-# Show all container
+### Show all container
 docker ps -a
 
-# show docker images
+### show docker images
 docker images
 
-# run compose file (need to be in docker-compose.yml path)
+### run compose file (need to be in docker-compose.yml path)
 docker-compose run
 
-# run in background
+### run in background
 docker-compose -d
 
-# stop compose 
+### stop compose 
 docker-compose down
 
-# run docker container
+### run docker container
 docker start container_name
 
-# show docker container logs
+### show docker container logs
 docker logs container_name
 
-# image bauen -> Dockerfiles änderungen werden nur übernommen wenn build nochmals ausgeführt wird
+### image bauen -> Dockerfiles änderungen werden nur übernommen wenn build nochmals ausgeführt wird
 docker build compose
 
-# show docker networks
+### show docker networks
 docker network ls
 
-# show docker network details
+### show docker network details
 docker inspect network_id
 
-# DELETE all images
+### DELETE all images
 docker rmi -f (docker images -q)
 
-# DELETE all container
+### DELETE all container
 docker rm -f (docker ps -a -q)
 
-# DELETE all volumes
+### DELETE all volumes
 docker volume rm (docker volume ls -q)
 docker volume rm $(docker volume ls -q)
 
-# open bash from running container
+### open bash from running container
 docker exec -it [docker id or docker name] bash
