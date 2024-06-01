@@ -6,7 +6,6 @@
 4. Navigate into folder and run Command
 docker compose up
 
-### DONE ###
 # Additional Commands and Infos
 
 # Pull Image install and run container
