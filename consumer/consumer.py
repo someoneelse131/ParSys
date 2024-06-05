@@ -17,7 +17,7 @@ while True:
         break
     except pika.exceptions.AMQPConnectionError:
         print("Waiting for RabbitMQ...")
-        time.sleep(5)
+        time.sleep(3)
 
 channel = connection.channel()
 
