@@ -5,27 +5,28 @@ services:
     container_name: rbq
     image: rabbitmq:3-management
     environment:
-      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
-      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
+      RABBITMQ_DEFAULT_USER: stockmarket
+      RABBITMQ_DEFAULT_PASS: supersecret123
     ports:
       - "5672:5672"
       - "15672:15672"
 
   stock-publisher:
     container_name: producer
-    build: ./producer
+    image: arsidd/producer:latest
+    restart: always
     environment:
-      - RABBITMQ_URL=${RABBITMQ_URL}
+      - RABBITMQ_URL=amqp://stockmarket:supersecret123@rabbitmq:5672/
       - TICKER_INTERVAL=1
     depends_on:
       - rabbitmq
 
   consumer-apple:
     container_name: consumer-apple
-    build: ./consumer
+    image: arsidd/consumer:latest
     environment:
-      - RABBITMQ_URL=${RABBITMQ_URL}
-      - MONGODB_URL=${MONGODB_URL}
+      - RABBITMQ_URL=amqp://stockmarket:supersecret123@rabbitmq:5672/
+      - MONGODB_URL=mongodb://mongodb1:27017,mongodb2:27018,mongodb3:27019/?replicaSet=rs0
       - QUEUE_NAME=AAPL
     depends_on:
       - rabbitmq
@@ -35,10 +36,10 @@ services:
 
   consumer-tesla:
     container_name: consumer-tesla
-    build: ./consumer
+    image: arsidd/consumer:latest
     environment:
-      - RABBITMQ_URL=${RABBITMQ_URL}
-      - MONGODB_URL=${MONGODB_URL}
+      - RABBITMQ_URL=amqp://stockmarket:supersecret123@rabbitmq:5672/
+      - MONGODB_URL=mongodb://mongodb1:27017,mongodb2:27018,mongodb3:27019/?replicaSet=rs0
       - QUEUE_NAME=TSLA
     depends_on:
       - rabbitmq
@@ -48,10 +49,10 @@ services:
 
   consumer-microsoft:
     container_name: consumer-microsoft
-    build: ./consumer
+    image: arsidd/consumer:latest
     environment:
-      - RABBITMQ_URL=${RABBITMQ_URL}
-      - MONGODB_URL=${MONGODB_URL}
+      - RABBITMQ_URL=amqp://stockmarket:supersecret123@rabbitmq:5672/
+      - MONGODB_URL=mongodb://mongodb1:27017,mongodb2:27018,mongodb3:27019/?replicaSet=rs0
       - QUEUE_NAME=MSFT
     depends_on:
       - rabbitmq
@@ -105,9 +106,9 @@ services:
 
   frontend1:
     container_name: fe1
-    build: ./frontend
+    image: arsidd/frontend:latest
     environment:
-      - MONGODB_URL=${MONGODB_URL}
+      - MONGODB_URL=mongodb://mongodb1:27017,mongodb2:27018,mongodb3:27019/?replicaSet=rs0
     ports:
       - "3000:3000"
     depends_on:
@@ -122,9 +123,9 @@ services:
 
   frontend2:
     container_name: fe2
-    build: ./frontend
+    image: arsidd/frontend:latest
     environment:
-      - MONGODB_URL=${MONGODB_URL}
+      - MONGODB_URL=mongodb://mongodb1:27017,mongodb2:27018,mongodb3:27019/?replicaSet=rs0
     ports:
       - "3001:3000"
     depends_on:
@@ -132,14 +133,14 @@ services:
       - mongodb2
       - mongodb3
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3001/healthcheck"]
+      test: ["CMD", "curl", "-f", "http://localhost:3000/healthcheck"]
       interval: 30s
       timeout: 10s
       retries: 3
 
   nginx:
     container_name: lb
-    build: ./nginx
+    image: arsidd/nginx:latest
     ports:
       - "80:80"
     depends_on:
