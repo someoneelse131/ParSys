@@ -1,73 +1,53 @@
-## DOCKER COMPOSE FILE FINISHED ##
+# Stock Market Data Processing System
 
-1. Install Docker on your machine
-2. edit ".env" files for specific settings
-3. Copy both files (docker-compose.yml and .env) into a folder
-4. Navigate into folder and run Command
-docker compose up
+## Introduction
+This project is designed to demonstrate a robust application setup using Docker, which includes services such as RabbitMQ, MongoDB, and custom applications for publishing and consuming stock market data.
 
-## Additional Commands and Infos
+## Requirements
 
-### Pull Image install and run container
-docker compose up -d
+### For Windows
+- **Docker Desktop for Windows**: Install Docker Desktop from [Docker Hub](https://hub.docker.com/editions/community/docker-ce-desktop-windows/). Ensure your system supports virtualization and that it's enabled.
 
-### Stop complete container
-docker compose down
+### For Linux
+- **Docker for Linux**: Depending on your distribution, Docker installation steps will vary. Refer to the official Docker documentation for [Linux](https://docs.docker.com/engine/install/). Install both Docker Engine and Docker Compose.
 
-### Lookup running containers
-docker ps
+### For Mac
+- **Docker Desktop for Mac**: Install Docker Desktop from [Docker Hub](https://hub.docker.com/editions/community/docker-ce-desktop-mac/). Docker Desktop for Mac provides an easy-to-use interface and includes Docker Engine, Docker CLI client, Docker Compose, Docker Content Trust, Kubernetes, and Credential Helper.
 
-### Lookup stopped containers
-docker ps -a
+## Configuration
+Directly modify the Docker Compose file to set up necessary configurations:
+- **RabbitMQ**:
+  - `RABBITMQ_DEFAULT_USER`: stockmarket
+  - `RABBITMQ_DEFAULT_PASS`: supersecret123
+  - `RABBITMQ_URL`: amqp://stockmarket:supersecret123@rabbitmq:5672/
+- **MongoDB**:
+  - `MONGODB_URL`: mongodb://mongodb1:27017,mongodb2:27018,mongodb3:27019/?replicaSet=rs0
 
+## Build and Run
+Build and run the application using Docker Compose:
+- `docker-compose up -d --build`
+This command builds the Docker images if not already built and starts the services defined in your Docker Compose file.
 
-# CHEATSHEET #
+## Usage
 
-### run docker container
-docker run -it container_name bash
+### Accessing Services
+- **RabbitMQ Management Interface**:
+  - Access RabbitMQ via the management interface at `http://localhost:15672`.
+  - Login with the credentials:
+    - **User**: stockmarket
+    - **Password**: supersecret123
+  - This interface allows you to manage queues, exchanges, and monitor the message broker's performance.
+- **System Access**:
+  - Access the system through `http://localhost`, where a load balancer manages traffic to the appropriate services. This setup simplifies interaction without needing to specify individual service ports.
 
-### Show active Container
-docker ps
+### Managing Containers
+- To stop all services:
+  - `docker-compose down`
+- To view logs for a specific service:
+  - `docker logs [container_name]`
 
-### Show all container
-docker ps -a
+### Reporting Issues
+Encounter issues? Please open an issue on GitHub with a detailed description, steps to reproduce, and any relevant logs.
 
-### show docker images
-docker images
-
-### run compose file (need to be in docker-compose.yml path)
-docker-compose run
-
-### run in background
-docker-compose -d
-
-### stop compose 
-docker-compose down
-
-### run docker container
-docker start container_name
-
-### show docker container logs
-docker logs container_name
-
-### image bauen -> Dockerfiles änderungen werden nur übernommen wenn build nochmals ausgeführt wird
-docker build compose
-
-### show docker networks
-docker network ls
-
-### show docker network details
-docker inspect network_id
-
-### DELETE all images
-docker rmi -f (docker images -q)
-
-### DELETE all container
-docker rm -f (docker ps -a -q)
-
-### DELETE all volumes
-docker volume rm (docker volume ls -q)
-docker volume rm $(docker volume ls -q)
-
-### open bash from running container
-docker exec -it [docker id or docker name] bash
+## Contributing
+Contributions are warmly welcomed. Fork the repository and submit a pull request with your changes. For significant modifications, please first open an issue to discuss your proposed changes.
